@@ -1,0 +1,16 @@
+services:
+  frontend:
+    image: gitea.honya.dev/honya-records/nou-frontend:latest
+    container_name: nou-frontend
+    restart: unless-stopped
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nou.rule=Host(`nou.honya.dev`)"
+      - "traefik.http.routers.nou.entrypoints=internal"
+      - "traefik.http.services.nou.loadbalancer.server.port=8098"
+
+networks:
+  traefik:
+    external: true
