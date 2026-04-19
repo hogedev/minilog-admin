@@ -21,7 +21,7 @@ steps:
   - name: build
     image: node:22-alpine
     environment:
-      VITE_API_URL: https://diary-api.honya.dev/api/v1
+      VITE_API_URL: https://minilog-api.honya.dev/api/v1
     commands:
       - npm run build -- --base=/
       - cp dist/index.html dist/404.html
@@ -37,8 +37,8 @@ steps:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
       - docker login -u $REGISTRY_USER -p $REGISTRY_PASS gitea.honya.dev
-      - docker build -t gitea.honya.dev/honya-records/nou-frontend:latest .
-      - docker push gitea.honya.dev/honya-records/nou-frontend:latest
+      - docker build -t gitea.honya.dev/honya-records/minilog-admin:latest .
+      - docker push gitea.honya.dev/honya-records/minilog-admin:latest
 
   - name: deploy
     image: docker:cli
@@ -49,8 +49,8 @@ steps:
         from_secret: gitea_token
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /home/honya/nou-frontend:/home/honya/nou-frontend
+      - /home/honya/minilog-admin:/home/honya/minilog-admin
     commands:
       - docker login -u $REGISTRY_USER -p $REGISTRY_PASS gitea.honya.dev
-      - docker compose -f /home/honya/nou-frontend/docker-compose.yml pull
-      - docker compose -f /home/honya/nou-frontend/docker-compose.yml up -d --force-recreate
+      - docker compose -f /home/honya/minilog-admin/docker-compose.yml pull
+      - docker compose -f /home/honya/minilog-admin/docker-compose.yml up -d --force-recreate

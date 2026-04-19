@@ -1,15 +1,15 @@
 services:
   frontend:
-    image: gitea.honya.dev/honya-records/nou-frontend:latest
-    container_name: nou-frontend
+    image: gitea.honya.dev/honya-records/minilog-admin:latest
+    container_name: minilog-admin
     restart: unless-stopped
     networks:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nou.rule=Host(`nou.honya.dev`)"
-      - "traefik.http.routers.nou.entrypoints=internal"
-      - "traefik.http.services.nou.loadbalancer.server.port=8098"
+      - "traefik.http.routers.minilog-admin.rule=Host(`minilog-admin.honya.dev`)"
+      - "traefik.http.routers.minilog-admin.entrypoints=internal"
+      - "traefik.http.services.minilog-admin.loadbalancer.server.port=8098"
 
 networks:
   traefik:
