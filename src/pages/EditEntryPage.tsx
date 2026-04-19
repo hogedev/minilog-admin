@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useEntry, useUpdateEntry } from "../hooks/useEntries";
@@ -10,15 +10,11 @@ export default function EditEntryPage() {
   const updateEntry = useUpdateEntry();
   const navigate = useNavigate();
 
-  const [text, setText] = useState("");
-  const [date, setDate] = useState("");
+  const [text, setText] = useState<string | null>(null);
+  const [date, setDate] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (entry) {
-      setText(entry.text || "");
-      setDate(entry.entry_date);
-    }
-  }, [entry]);
+  const displayText = text ?? entry?.text ?? "";
+  const displayDate = date ?? entry?.entry_date ?? "";
 
   if (isLoading) {
     return (
@@ -41,7 +37,10 @@ export default function EditEntryPage() {
     try {
       await updateEntry.mutateAsync({
         id: entryId,
-        data: { text: text.trim() || undefined, entry_date: date },
+        data: {
+          text: displayText.trim() || undefined,
+          entry_date: displayDate,
+        },
       });
       toast.success("更新しました");
       navigate(`/entries/${entryId}`);
@@ -53,7 +52,7 @@ export default function EditEntryPage() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <textarea
-        value={text}
+        value={displayText}
         onChange={(e) => setText(e.target.value)}
         placeholder="作業内容を記録..."
         rows={6}
@@ -62,7 +61,7 @@ export default function EditEntryPage() {
 
       <input
         type="date"
-        value={date}
+        value={displayDate}
         onChange={(e) => setDate(e.target.value)}
         className="w-full bg-surface-1 border border-border rounded-lg px-3 py-2 text-sm text-[var(--c-text)] focus:border-accent focus:outline-none"
       />
