@@ -64,7 +64,7 @@ export function useUpdateEntry() {
       data,
     }: {
       id: number;
-      data: { text?: string; entry_date?: string };
+      data: { text?: string; entry_date?: string; time_slot?: string };
     }) =>
       fetchApi<Entry>(`/entries/${id}`, {
         method: "PUT",
